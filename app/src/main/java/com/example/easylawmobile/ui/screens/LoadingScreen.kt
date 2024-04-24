@@ -62,7 +62,7 @@ import com.example.easylawmobile.R
 
 
 @Composable
-fun Header() {
+fun HeaderS() {
     Box(modifier = Modifier.fillMaxWidth()) {
         Image(
             painter = painterResource(id = R.drawable.big),
@@ -138,7 +138,7 @@ class SurfaceTextureListener : TextureView.SurfaceTextureListener {
 @Composable
 fun LoadingPage() {
     Column(modifier = Modifier.fillMaxSize()) {
-        Header()
+        HeaderS()
         Spacer(modifier = Modifier.weight(1f))
         VideoAnimation()
         Spacer(modifier = Modifier.weight(1f))
