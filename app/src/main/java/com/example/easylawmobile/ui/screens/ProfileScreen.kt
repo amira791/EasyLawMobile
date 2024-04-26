@@ -44,6 +44,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -51,6 +52,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Red
@@ -78,34 +80,55 @@ fun ProfileScreen() {
             modifier = Modifier.fillMaxWidth(),
             contentAlignment = Alignment.Center
         ) {
-            Header() // Assuming you have a composable called Header()
+            // Assuming you have a composable called Header()
+            Header()
         }
-
+        Spacer(modifier = Modifier.height(22.dp))
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp),
+                .padding(16.dp)
+                .clip(RoundedCornerShape(10.dp)),
             verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
             // First Box: Contains links with icons
-            Box(modifier = Modifier.fillMaxWidth()) {
-                Column {
+            Box(
+                modifier = Modifier
+                    .clip(RoundedCornerShape(8.dp))
+                    .fillMaxWidth()
+                    .shadow(2.dp)
 
-                    MenuButton("Information Personnel", Icons.Filled.Info) {
+            ) {
+                Column(
+                    modifier = Modifier
+                        .padding(22.dp)
+
+                ){
+                    MenuButton1("Information Personnel", Icons.Filled.Info) {
                         // Handle Information Personnel click
                     }
-                    MenuButton("My Interest", Icons.Filled.Favorite) {
+                    MenuButton1("My Interest", Icons.Filled.Favorite) {
                         // Handle My Interest click
                     }
-                    MenuButton("Security Info", Icons.Filled.Warning) {
+                    MenuButton1("Security Info", Icons.Filled.Warning) {
                         // Handle Security Info click
                     }
                 }
             }
 
             // Second Box: Contains toggle for notifications and theme
-            Box(modifier = Modifier.fillMaxWidth()) {
-                Column {
+            Box(
+                modifier = Modifier
+                    .clip(RoundedCornerShape(8.dp))
+                    .fillMaxWidth()
+                    .shadow(2.dp)
+
+            ) {
+                Column(
+                    modifier = Modifier
+                        .padding(20.dp)
+
+                ) {
                     SwitchWithIcon("Notifications", Icons.Filled.Notifications, notificationEnabled) {
                         notificationEnabled = it
                     }
@@ -116,12 +139,20 @@ fun ProfileScreen() {
             }
 
             // Third Box: Link to log out with an icon
-            Box(modifier = Modifier.fillMaxWidth()) {
-                MenuButton("Log Out", Icons.Filled.ExitToApp) {
-                    // Handle log out
+            Box(
+                modifier = Modifier
+                    .clip(RoundedCornerShape(8.dp))
+                    .fillMaxWidth()
+                    .shadow(2.dp) // Adding shadow to the Box
+                    .background(Color(0xFF00C8CB))
+
+            ) {
+                MenuButton2("Log Out", Icons.Filled.ExitToApp) {
                 }
             }
         }
     }
 }
+
+
 
