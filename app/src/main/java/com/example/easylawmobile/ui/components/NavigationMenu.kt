@@ -25,57 +25,47 @@ import com.siviwe.composeapp.data.Laws
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-    @Composable
-    fun NavigationMenu(
-        navController: NavHostController,
+@Composable
+fun NavigationMenu(navController: NavHostController) {
+    val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
+    val laws = Laws.MainLaw
 
-        ) {
-        val currentindex =navController.currentBackStackEntryAsState().value?.destination?.route
-        val laws = Laws.MainLaw
-        Scaffold(
-
-            bottomBar = {
-                Surface (
-                    color = Color(0xFFE3FAFC),
-
-                )
-                {
-                    BottomAppBar(
-
-                        contentColor = MaterialTheme.colorScheme.primary,
-                    ) {
-                        NavigationBar {
-                            NavigationBarItem(label={ Text(text = "Home")},
-                                selected = currentindex== Routes.HomeScreen.route, onClick = { navController.navigate(
-                                    Routes.HomeScreen.route) }, //home
-                                icon = {Icon(Icons.Default.Home,contentDescription = "Home") })
-                            NavigationBarItem(label={ Text(text = "Interest")},
-                                selected = currentindex == Routes.InterestScreen.route,
-                                onClick = { navController.navigate(Routes.InterestScreen.route) },
-                                icon = { Icon(Icons.Default.Favorite,contentDescription = "Interest") })
-                            NavigationBarItem(label={ Text(text = "Profile")},selected = currentindex== Routes.ProfileScreen.route,
-                                onClick = { navController.navigate(Routes.ProfileScreen.route) },
-                                icon = { Icon(Icons.Default.AccountBox,contentDescription = "Profile") })
-                        }
-
+    Scaffold(
+        bottomBar = {
+            if (currentRoute != Routes.LoadingScreen.route) {
+                BottomAppBar(
+                    contentColor = MaterialTheme.colorScheme.primary,
+                    containerColor = Color(0xFFE3FAFC),
+                ) {
+                    NavigationBar {
+                        NavigationBarItem(
+                            label = { Text(text = "Home") },
+                            selected = currentRoute == Routes.HomeScreen.route,
+                            onClick = { navController.navigate(Routes.HomeScreen.route) },
+                            icon = { Icon(Icons.Default.Home, contentDescription = "Home") }
+                        )
+                        NavigationBarItem(
+                            label = { Text(text = "Interest") },
+                            selected = currentRoute == Routes.InterestScreen.route,
+                            onClick = { navController.navigate(Routes.InterestScreen.route) },
+                            icon = { Icon(Icons.Default.Favorite, contentDescription = "Interest") }
+                        )
+                        NavigationBarItem(
+                            label = { Text(text = "Profile") },
+                            selected = currentRoute == Routes.ProfileScreen.route,
+                            onClick = { navController.navigate(Routes.ProfileScreen.route) },
+                            icon = { Icon(Icons.Default.AccountBox, contentDescription = "Profile") }
+                        )
                     }
-
                 }
-
-            },
-
-            ) {
-            NavHost(navController = navController, startDestination = Routes.HomeScreen.route) {
-                composable(Routes.HomeScreen.route) { HomeScreen(laws) }
-                composable(Routes.InterestScreen.route) { InterestScreen() }
-                composable(Routes.ProfileScreen.route) { ProfileScreen() }
-
-
             }
-
-
-
-
+        },
+    ) {
+        NavHost(navController = navController, startDestination = Routes.LoadingScreen.route) {
+            composable(Routes.LoadingScreen.route) { LoadingScreen(navController) }
+            composable(Routes.HomeScreen.route) { HomeScreen(laws) }
+            composable(Routes.InterestScreen.route) { InterestScreen() }
+            composable(Routes.ProfileScreen.route) { ProfileScreen() }
         }
-
     }
+}

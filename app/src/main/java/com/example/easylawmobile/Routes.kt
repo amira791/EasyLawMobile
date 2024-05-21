@@ -8,6 +8,9 @@ sealed class Routes (val route: String) {
 
     object ProfileScreen : Routes ("ProfileScreen")
 
+    object LoadingScreen: Routes ("LoadingScreen")
+
+    object SignInScreen : Routes ("SignInScreen")
 
 
 }

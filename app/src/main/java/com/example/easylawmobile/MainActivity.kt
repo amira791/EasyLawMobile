@@ -1,5 +1,6 @@
 package com.example.easylawmobile
 
+import LoadingScreen
 import NavigationMenu
 import ProfileScreen
 import android.os.Bundle
@@ -25,6 +26,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
+
                     NavigationMenu(navController = rememberNavController())
                 }
             }
