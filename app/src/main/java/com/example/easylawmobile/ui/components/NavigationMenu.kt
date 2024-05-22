@@ -16,19 +16,28 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.BlendMode.Companion.Color
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.siviwe.composeapp.data.Laws
+import com.example.easylawmobile.data.viewModels.UserModel
+
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun NavigationMenu(navController: NavHostController) {
+fun NavigationMenu(
+    navController: NavHostController,
+    userModel: UserModel
+) {
     val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
-    val laws = Laws.MainLaw
+
+    val context = LocalContext.current
+    val sh = SharedPreferencesManager(context)
+    var isLogged = sh.isLoggedIn()
+    var isSubscribed = sh.isSubscribed()
 
     Scaffold(
         bottomBar = {
@@ -63,9 +72,11 @@ fun NavigationMenu(navController: NavHostController) {
     ) {
         NavHost(navController = navController, startDestination = Routes.LoadingScreen.route) {
             composable(Routes.LoadingScreen.route) { LoadingScreen(navController) }
-            composable(Routes.HomeScreen.route) { HomeScreen(laws) }
-            composable(Routes.InterestScreen.route) { InterestScreen() }
+            composable(Routes.HomeScreen.route) { HomeScreen() }
+            composable(Routes.InterestScreen.route) { InterestScreen(isLogged, isSubscribed, navController) }
             composable(Routes.ProfileScreen.route) { ProfileScreen() }
+            composable(Routes.SignInScreen.route) { SignInScreen(navController = navController, userModel = userModel )}
+
         }
     }
 }
