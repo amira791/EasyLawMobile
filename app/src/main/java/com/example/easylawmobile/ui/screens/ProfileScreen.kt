@@ -68,11 +68,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.easylawmobile.R
-
+import com.example.easylawmobile.data.viewModels.UserModel
 
 
 @Composable
-fun ProfileScreen(navController: NavController, sharedPreferencesManager: SharedPreferencesManager) {
+fun ProfileScreen(navController: NavController, sharedPreferencesManager: SharedPreferencesManager, userModel: UserModel) {
     var themeDark by remember { mutableStateOf(false) } // State for toggling theme
     var notificationEnabled by remember { mutableStateOf(false) } // State for toggling notifications
 
@@ -144,6 +144,8 @@ fun ProfileScreen(navController: NavController, sharedPreferencesManager: Shared
                     .background(Color(0xFF00C8CB))
             ) {
                 MenuButton2("Log Out", Icons.Filled.ExitToApp) {
+                    userModel.setNavValue(0)
+                    sharedPreferencesManager.saveToken("")
                     sharedPreferencesManager.setLoggedIn(false)
                     navController.navigate(Routes.HomeScreen.route)
                 }

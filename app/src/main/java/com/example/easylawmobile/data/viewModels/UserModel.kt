@@ -48,6 +48,10 @@ class UserModel(
         }
     }
 
+    fun setNavValue(newValue: Int?) {
+        nav.value = newValue
+    }
+
 
     class Factory(
         private val sharedPreferencesManager: SharedPreferencesManager,

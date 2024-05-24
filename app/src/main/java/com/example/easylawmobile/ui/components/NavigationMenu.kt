@@ -74,7 +74,7 @@ fun NavigationMenu(
             composable(Routes.LoadingScreen.route) { LoadingScreen(navController) }
             composable(Routes.HomeScreen.route) { HomeScreen() }
             composable(Routes.InterestScreen.route) { InterestScreen(navController, sh) }
-            composable(Routes.ProfileScreen.route) { ProfileScreen(navController, sh) }
+            composable(Routes.ProfileScreen.route) { ProfileScreen(navController, sh, userModel) }
             composable(Routes.SignInScreen.route) { SignInScreen( navController,userModel, sh  )}
 
         }
