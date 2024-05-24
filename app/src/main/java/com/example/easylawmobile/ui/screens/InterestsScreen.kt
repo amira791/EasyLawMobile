@@ -208,6 +208,42 @@ fun InterestScreen(
                 }
             }
         }
+        if (isLoggedIn == true && isSubscribed == false)
+        {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
+                modifier = Modifier.fillMaxSize()
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.no), // Replace with your image resource
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(200.dp) // Adjust size as needed
+                        .padding(bottom = 16.dp)
+                )
+                Text(
+                    text = "You are not subscribed",
+                    style = TextStyle(
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp
+                    ),
+                    modifier = Modifier.padding(bottom = 16.dp)
+                )
+                Button(
+                    onClick = {
+                        navHostController.navigate(Routes.SubscriptionScreen.route)
+                    },
+                    colors = ButtonDefaults.buttonColors(Color(0xFF00C8CB)),
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .fillMaxWidth()
+                ) {
+                    Text(text = "Subscribe")
+                }
+            }
+
+        }
 
 
 

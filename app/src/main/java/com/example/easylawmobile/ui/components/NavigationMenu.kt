@@ -2,6 +2,7 @@ import android.annotation.SuppressLint
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.LocationOn
@@ -54,16 +55,16 @@ fun NavigationMenu(
                             icon = { Icon(Icons.Default.Home, contentDescription = "Home") }
                         )
                         NavigationBarItem(
-                            label = { Text(text = "Interest") },
+                            label = { Text(text = "News") },
                             selected = currentRoute == Routes.InterestScreen.route,
                             onClick = { navController.navigate(Routes.InterestScreen.route) },
-                            icon = { Icon(Icons.Default.Favorite, contentDescription = "Interest") }
+                            icon = { Icon(Icons.Default.Favorite, contentDescription = "News") }
                         )
                         NavigationBarItem(
-                            label = { Text(text = "Profile") },
-                            selected = currentRoute == Routes.ProfileScreen.route,
-                            onClick = { navController.navigate(Routes.ProfileScreen.route) },
-                            icon = { Icon(Icons.Default.AccountBox, contentDescription = "Profile") }
+                            label = { Text(text = "GPT") },
+                            selected = currentRoute == Routes.GPTScreen.route,
+                            onClick = { navController.navigate(Routes.GPTScreen.route) },
+                            icon = { Icon(Icons.Default.Face, contentDescription = "GPT") }
                         )
                     }
                 }
@@ -72,10 +73,14 @@ fun NavigationMenu(
     ) {
         NavHost(navController = navController, startDestination = Routes.LoadingScreen.route) {
             composable(Routes.LoadingScreen.route) { LoadingScreen(navController) }
-            composable(Routes.HomeScreen.route) { HomeScreen() }
+            composable(Routes.HomeScreen.route) { HomeScreen(navController) }
             composable(Routes.InterestScreen.route) { InterestScreen(navController, sh) }
             composable(Routes.ProfileScreen.route) { ProfileScreen(navController, sh, userModel) }
             composable(Routes.SignInScreen.route) { SignInScreen( navController,userModel, sh  )}
+            composable(Routes.GPTScreen.route){ GPTScreen()}
+            composable(Routes.NotificationScreen.route) { NotificationScreen()}
+            composable(Routes.SubscriptionScreen.route) { SubscriptionScreen(navController = navController)}
+            composable(Routes.PaymentDetailsScreen.route) {PaymentDetailsScreen()}
 
         }
     }

@@ -12,5 +12,13 @@ sealed class Routes (val route: String) {
 
     object SignInScreen : Routes ("SignInScreen")
 
+    object GPTScreen : Routes ("GPTScreen")
+
+    object  NotificationScreen: Routes ("NotificationScreen")
+
+    object  SubscriptionScreen : Routes ("SubscriptionScreen")
+
+    object PaymentDetailsScreen : Routes ("PaymentDetailsScree")
+
 
 }

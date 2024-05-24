@@ -81,8 +81,8 @@ fun ProfileScreen(navController: NavController, sharedPreferencesManager: Shared
             modifier = Modifier.fillMaxWidth(),
             contentAlignment = Alignment.Center
         ) {
-            // Assuming you have a composable called Header()
-            Header()
+
+            Header(navController)
         }
         Spacer(modifier = Modifier.height(22.dp))
         Column(

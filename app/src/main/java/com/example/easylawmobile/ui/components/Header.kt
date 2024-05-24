@@ -24,8 +24,9 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.easylawmobile.R
 
+
 @Composable
-fun Header(navController: NavController) {
+fun HeaderComp(navController: NavController) {
     Box(modifier = Modifier.fillMaxWidth()) {
 
         Image(
@@ -41,60 +42,27 @@ fun Header(navController: NavController) {
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.TopStart)
-                .padding(16.dp), // Adjust padding as necessary
+                .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            // Home Icon on the Left
+            // User Icon on the Left
             Image(
-                painter = painterResource(id = R.drawable.tur),
-                contentDescription = "Return",
+                painter = painterResource(id = R.drawable.user),
+                contentDescription = "User Profile",
                 modifier = Modifier
-                    .size(24.dp)
+                    .size(35.dp)
                     .clickable { navController.navigate(Routes.ProfileScreen.route) }
             )
 
-            // Menu Icon on the Right
+
             Image(
                 painter = painterResource(id = R.drawable.notf),
                 contentDescription = "Notification",
                 modifier = Modifier
-                    .size(24.dp)
+                    .size(35.dp) // Adjust size as necessary
                     .clickable { navController.navigate(Routes.NotificationScreen.route) }
             )
-        }
-
-        Column(
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-        ) {
-            Box(
-                modifier = Modifier
-                    .size(80.dp)
-                    .clip(RoundedCornerShape(50))
-                    .background(color = Color(0xFF00C8CB)),
-                contentAlignment = Alignment.Center
-            ) {
-
-                Text(
-                    text = "A",
-                    color = Color.White,
-                    fontSize = 24.sp
-                )
-            }
-
-
-            Text(
-                text = "amira791",
-                color = Color.Black, // Adjust the color as per your theme
-                fontSize = 16.sp, // Adjust the font size as per your requirement
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally) // Center the text horizontally
-                    .padding(top = 8.dp) // Space between the profile image and the text
-            )
-
-
         }
     }
 }

@@ -23,13 +23,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.example.easylawmobile.R
 
 
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen(navController: NavController) {
     var searchQuery by remember { mutableStateOf("") }
     var username by remember { mutableStateOf("") }
 
@@ -38,7 +39,7 @@ fun HomeScreen() {
             modifier = Modifier.fillMaxWidth(),
             contentAlignment = Alignment.Center
         ) {
-            Header()
+            HeaderComp(navController)
         }
         Spacer(modifier = Modifier.height(20.dp))
         SearchBar(searchQuery) { query ->
