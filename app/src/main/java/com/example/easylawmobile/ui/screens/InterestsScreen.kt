@@ -36,6 +36,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -147,11 +148,18 @@ fun HeaderInt() {
 
 @Composable
 fun InterestScreen(
-    isLoggedIn : Boolean,
-    isSubscribed: Boolean,
-    navHostController: NavHostController
+    navHostController: NavHostController,
+    sharedPreferencesManager: SharedPreferencesManager
 ) {
-    if (isLoggedIn && isSubscribed) {
+    var isLoggedIn by remember { mutableStateOf<Boolean?>(null) }
+    var isSubscribed by remember { mutableStateOf<Boolean?>(null) }
+
+    LaunchedEffect(Unit) {
+        isSubscribed = sharedPreferencesManager.isSubscribed()
+        isLoggedIn = sharedPreferencesManager.isLoggedIn()
+    }
+
+    if (isLoggedIn == true && isSubscribed == true) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
@@ -166,7 +174,7 @@ fun InterestScreen(
 
 
     } else {
-        if (!isLoggedIn) {
+        if (isLoggedIn == false) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center,

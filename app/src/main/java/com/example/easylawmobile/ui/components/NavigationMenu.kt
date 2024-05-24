@@ -73,9 +73,9 @@ fun NavigationMenu(
         NavHost(navController = navController, startDestination = Routes.LoadingScreen.route) {
             composable(Routes.LoadingScreen.route) { LoadingScreen(navController) }
             composable(Routes.HomeScreen.route) { HomeScreen() }
-            composable(Routes.InterestScreen.route) { InterestScreen(isLogged, isSubscribed, navController) }
-            composable(Routes.ProfileScreen.route) { ProfileScreen() }
-            composable(Routes.SignInScreen.route) { SignInScreen(navController = navController, userModel = userModel )}
+            composable(Routes.InterestScreen.route) { InterestScreen(navController, sh) }
+            composable(Routes.ProfileScreen.route) { ProfileScreen(navController, sh) }
+            composable(Routes.SignInScreen.route) { SignInScreen( navController,userModel, sh  )}
 
         }
     }

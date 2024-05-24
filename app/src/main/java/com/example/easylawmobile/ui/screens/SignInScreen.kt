@@ -64,13 +64,19 @@ fun FooterDesign() {
 }
 
 @Composable
-fun SignInScreen(navController: NavController, userModel: UserModel) {
+fun SignInScreen(navController: NavController, userModel: UserModel, sharedPreferencesManager: SharedPreferencesManager) {
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
+    var navv by remember { mutableStateOf<Int?>(0) }
 
-    // LaunchedEffect to handle navigation after login
+    navv = userModel.nav.value
+    if (navv == 1) {
+        LaunchedEffect(Unit ){
+            navController.navigate(Routes.HomeScreen.route)
+        }
 
+    }
 
     Column(modifier = Modifier.fillMaxSize()) {
         Box(

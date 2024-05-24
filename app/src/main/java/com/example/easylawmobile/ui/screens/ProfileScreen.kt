@@ -66,12 +66,13 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.easylawmobile.R
 
 
 
 @Composable
-fun ProfileScreen() {
+fun ProfileScreen(navController: NavController, sharedPreferencesManager: SharedPreferencesManager) {
     var themeDark by remember { mutableStateOf(false) } // State for toggling theme
     var notificationEnabled by remember { mutableStateOf(false) } // State for toggling notifications
 
@@ -97,13 +98,11 @@ fun ProfileScreen() {
                     .clip(RoundedCornerShape(8.dp))
                     .fillMaxWidth()
                     .shadow(2.dp)
-
             ) {
                 Column(
                     modifier = Modifier
                         .padding(22.dp)
-
-                ){
+                ) {
                     MenuButton1("Information Personnel", Icons.Filled.Info) {
                         // Handle Information Personnel click
                     }
@@ -122,12 +121,10 @@ fun ProfileScreen() {
                     .clip(RoundedCornerShape(8.dp))
                     .fillMaxWidth()
                     .shadow(2.dp)
-
             ) {
                 Column(
                     modifier = Modifier
                         .padding(20.dp)
-
                 ) {
                     SwitchWithIcon("Notifications", Icons.Filled.Notifications, notificationEnabled) {
                         notificationEnabled = it
@@ -143,11 +140,12 @@ fun ProfileScreen() {
                 modifier = Modifier
                     .clip(RoundedCornerShape(8.dp))
                     .fillMaxWidth()
-                    .shadow(2.dp) // Adding shadow to the Box
+                    .shadow(2.dp)
                     .background(Color(0xFF00C8CB))
-
             ) {
                 MenuButton2("Log Out", Icons.Filled.ExitToApp) {
+                    sharedPreferencesManager.setLoggedIn(false)
+                    navController.navigate(Routes.HomeScreen.route)
                 }
             }
         }
