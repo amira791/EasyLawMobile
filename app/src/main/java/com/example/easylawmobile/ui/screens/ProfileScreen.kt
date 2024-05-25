@@ -103,13 +103,13 @@ fun ProfileScreen(navController: NavController, sharedPreferencesManager: Shared
                     modifier = Modifier
                         .padding(22.dp)
                 ) {
-                    MenuButton1("Information Personnel", Icons.Filled.Info) {
+                    MenuButton1("المعلومات الشخصية", Icons.Filled.Info) {
                         // Handle Information Personnel click
                     }
-                    MenuButton1("My Interest", Icons.Filled.Favorite) {
+                    MenuButton1("اهتماماتي", Icons.Filled.Favorite) {
                         // Handle My Interest click
                     }
-                    MenuButton1("Security Info", Icons.Filled.Warning) {
+                    MenuButton1("الأمن", Icons.Filled.Warning) {
                         // Handle Security Info click
                     }
                 }
@@ -126,10 +126,10 @@ fun ProfileScreen(navController: NavController, sharedPreferencesManager: Shared
                     modifier = Modifier
                         .padding(20.dp)
                 ) {
-                    SwitchWithIcon("Notifications", Icons.Filled.Notifications, notificationEnabled) {
+                    SwitchWithIcon("الاشعارات", Icons.Filled.Notifications, notificationEnabled) {
                         notificationEnabled = it
                     }
-                    SwitchWithIcon("Theme", if (themeDark) Icons.Filled.AddCircle else Icons.Filled.Add, themeDark) {
+                    SwitchWithIcon("السمة", if (themeDark) Icons.Filled.AddCircle else Icons.Filled.Add, themeDark) {
                         themeDark = it
                     }
                 }

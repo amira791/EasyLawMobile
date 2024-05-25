@@ -10,6 +10,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -60,22 +61,22 @@ fun NavigationMenu(
                 ) {
                     NavigationBar {
                         NavigationBarItem(
-                            label = { Text(text = "Home") },
+                            label = { Text(text = "الرئيسية") },
                             selected = route == Routes.HomeScreen.route,
                             onClick = { navController.navigate(Routes.HomeScreen.route) },
-                            icon = { Icon(Icons.Default.Home, contentDescription = "Home") }
+                            icon = { Icon(Icons.Default.Home, contentDescription = "الرئيسية") }
                         )
                         NavigationBarItem(
-                            label = { Text(text = "News") },
+                            label = { Text(text = "اشتراكاتي") },
                             selected = route == Routes.InterestScreen.route,
-                            onClick = { navController.navigate(Routes.InterestScreen.route) },
-                            icon = { Icon(Icons.Default.Favorite, contentDescription = "News") }
+                            onClick = { navController.navigate(Routes.SubscriptionScreen.route) },
+                            icon = { Icon(Icons.Default.ShoppingCart, contentDescription = "اشتركاتي") }
                         )
                         NavigationBarItem(
-                            label = { Text(text = "GPT") },
+                            label = { Text(text = "المحلل الذكي") },
                             selected = route == Routes.GPTScreen.route,
                             onClick = { navController.navigate(Routes.GPTScreen.route) },
-                            icon = { Icon(Icons.Default.Face, contentDescription = "GPT") }
+                            icon = { Icon(Icons.Default.Face, contentDescription = "المحلل الذكي") }
                         )
                     }
                 }
