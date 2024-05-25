@@ -1,134 +1,220 @@
-import androidx.activity.compose.rememberLauncherForActivityResult
+import android.graphics.Bitmap
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Send
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
+import androidx.compose.material.icons.rounded.Add
+
+import androidx.compose.material.icons.rounded.Send
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color.Companion.Green
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.core.graphics.drawable.toBitmap
+import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.compose.AsyncImagePainter
+import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
+import coil.size.Size
+import com.example.easylawmobile.data.viewModels.ChatModel
+import com.example.easylawmobile.ui.components.ChatUiEvent
 
+import kotlinx.coroutines.flow.MutableStateFlow
 
-@Composable
-fun MessageCard(message: String) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 4.dp)
-    ) {
-        Card(
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surfaceVariant,
-            ),
-            modifier = Modifier
-                .size(width = 100.dp, height = 12.dp)
-        ) {
-            Text(
-                text = message,
-                modifier = Modifier.padding(12.dp),
-                color = Color.Black
-            )
-        }
-    }
-
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun GPTScreen() {
-    val message = remember { mutableStateOf("") }
-    val messages = remember { mutableStateListOf<String>() }
-    val imagePickerLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.GetContent(),
-        onResult = { uri ->
-            // Handle the selected image URI (upload and send)
-            messages.add("Sent a photo: $uri")
-        }
-    )
+fun GPTScreen(
+    paddingValues: PaddingValues,
+    uriState: MutableStateFlow<String>,
+    imagePicker: ActivityResultLauncher<PickVisualMediaRequest>
+) {
+    val chaViewModel = viewModel<ChatModel>()
+    val chatState = chaViewModel.chatState.collectAsState().value
+
+    val bitmap = getBitmap(uriState)
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFF0F0F0))
-            .padding(16.dp),
-        verticalArrangement = Arrangement.SpaceBetween
+            .padding(top = paddingValues.calculateTopPadding()),
+        verticalArrangement = Arrangement.Bottom
     ) {
-        // Message list
         LazyColumn(
-            modifier = Modifier.weight(1f),
-            contentPadding = PaddingValues(vertical = 8.dp)
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxWidth()
+                .padding(horizontal = 8.dp),
+            reverseLayout = true
         ) {
-            items(messages) { msg ->
-                MessageCard(message = msg)
+            itemsIndexed(chatState.chatList) { index, chat ->
+                if (chat.isFromUser) {
+                    UserChatItem(prompt = chat.prompt, bitmap = chat.bitmap)
+                } else {
+                    ModelChatItem(response = chat.prompt)
+                }
             }
         }
 
-        // Message input and send button
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color.White, shape = RoundedCornerShape(25.dp))
-                .padding(horizontal = 16.dp, vertical = 8.dp), // Adjust vertical padding as needed
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween // Add this line
+                .padding(bottom = 16.dp, start = 4.dp, end = 4.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            IconButton(onClick = {
-                imagePickerLauncher.launch("image/*")
-            }) {
-                Icon(imageVector = Icons.Default.Add, contentDescription = "Upload Photo")
-            }
-            Box(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(horizontal = 8.dp)
-            ) {
-                TextField(
-                    value = message.value,
-                    onValueChange = { message.value = it },
-                    placeholder = { Text("Type a message...") },
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = TextFieldDefaults.textFieldColors(
-                        focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent
+
+            Column {
+                bitmap?.let {
+                    Image(
+                        modifier = Modifier
+                            .size(40.dp)
+                            .padding(bottom = 2.dp)
+                            .clip(RoundedCornerShape(6.dp)),
+                        contentDescription = "picked image",
+                        contentScale = ContentScale.Crop,
+                        bitmap = it.asImageBitmap()
                     )
+                }
+
+                Icon(
+                    modifier = Modifier
+                        .size(40.dp)
+                        .clickable {
+                            imagePicker.launch(
+                                PickVisualMediaRequest.Builder()
+                                    .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                                    .build()
+                            )
+                        },
+                    imageVector = Icons.Rounded.Add,
+                    contentDescription = "Add Photo",
+                    tint = MaterialTheme.colorScheme.primary
                 )
             }
-            IconButton(onClick = {
-                if (message.value.isNotBlank()) {
-                    messages.add(message.value)
-                    message.value = ""
+
+            Spacer(modifier = Modifier.width(8.dp))
+
+            TextField(
+                modifier = Modifier.weight(1f),
+                value = chatState.prompt,
+                onValueChange = {
+                    chaViewModel.onEvent(ChatUiEvent.UpdatePrompt(it))
+                },
+                placeholder = {
+                    Text(text = "Type a prompt")
                 }
-            }) {
-                Icon(imageVector = Icons.Default.Send, contentDescription = "Send")
-            }
+            )
+
+            Spacer(modifier = Modifier.width(8.dp))
+
+            Icon(
+                modifier = Modifier
+                    .size(40.dp)
+                    .clickable {
+                        chaViewModel.onEvent(ChatUiEvent.SendPrompt(chatState.prompt, bitmap))
+                        uriState.value = ""
+                    },
+                imageVector = Icons.Rounded.Send,
+                contentDescription = "Send prompt",
+                tint = MaterialTheme.colorScheme.primary
+            )
+        }
+    }
+}
+
+@Composable
+fun UserChatItem(prompt: String, bitmap: Bitmap?) {
+    Column(
+        modifier = Modifier.padding(start = 100.dp, bottom = 16.dp)
+    ) {
+        bitmap?.let {
+            Image(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(260.dp)
+                    .padding(bottom = 2.dp)
+                    .clip(RoundedCornerShape(12.dp)),
+                contentDescription = "image",
+                contentScale = ContentScale.Crop,
+                bitmap = it.asImageBitmap()
+            )
         }
 
-
+        Text(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(12.dp))
+                .background(MaterialTheme.colorScheme.primary)
+                .padding(16.dp),
+            text = prompt,
+            fontSize = 17.sp,
+            color = MaterialTheme.colorScheme.onPrimary
+        )
     }
+}
+
+@Composable
+fun ModelChatItem(response: String) {
+    Column(
+        modifier = Modifier.padding(end = 100.dp, bottom = 16.dp)
+    ) {
+        Text(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(12.dp))
+                .background(Green)
+                .padding(16.dp),
+            text = response,
+            fontSize = 17.sp,
+            color = MaterialTheme.colorScheme.onPrimary
+        )
+    }
+}
+
+@Composable
+private fun getBitmap(uriState: MutableStateFlow<String>): Bitmap? {
+    val uri by uriState.collectAsState()
+
+    val imageState: AsyncImagePainter.State = rememberAsyncImagePainter(
+        model = ImageRequest.Builder(LocalContext.current)
+            .data(uri)
+            .size(Size.ORIGINAL)
+            .build()
+    ).state
+
+    if (imageState is AsyncImagePainter.State.Success) {
+        return imageState.result.drawable.toBitmap()
+    }
+
+    return null
 }

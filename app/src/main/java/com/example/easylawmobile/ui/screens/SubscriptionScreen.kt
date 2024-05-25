@@ -75,7 +75,6 @@ fun SubscriptionOffer(
             .fillMaxWidth()
             .padding(bottom = 16.dp)
             .background(color = Color(0xFFE3FAFC))
-            .shadow(2.dp, shape = RoundedCornerShape(3.dp))
             .clickable { /* Handle click on subscription offer */ },
         contentAlignment = Alignment.Center
     ) {
@@ -128,7 +127,7 @@ fun PaymentOptionButton(
             contentAlignment = Alignment.Center,
             modifier = Modifier
                 .size(70.dp)
-                .shadow(2.dp, shape = RoundedCornerShape(3.dp))
+                .shadow(0.5.dp, shape = RoundedCornerShape(3.dp))
         ) {
             Image(
                 painter = painterResource(id = iconResId),
