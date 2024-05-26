@@ -14,6 +14,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
+import com.example.easylawmobile.data.viewModels.PaymentModel
 import com.example.easylawmobile.data.viewModels.UserModel
 import com.example.easylawmobile.ui.theme.EasyLawMobileTheme
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -39,6 +40,16 @@ class MainActivity : ComponentActivity() {
       )
     }
 
+    private  val paymentModel : PaymentModel by viewModels {
+        PaymentModel.Factory(
+            (application as EasyLawApplication).sharedPreferencesManager,
+            (application as EasyLawApplication).userRepository,
+            (application as EasyLawApplication).paymentRepository
+        )
+    }
+
+
+
 
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,7 +62,7 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
 
-                    NavigationMenu(navController = rememberNavController() , userModel, uriState, imagePicker)
+                    NavigationMenu(navController = rememberNavController() , userModel, paymentModel, uriState, imagePicker)
 
                 }
             }

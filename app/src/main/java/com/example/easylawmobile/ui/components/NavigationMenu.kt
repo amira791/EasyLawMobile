@@ -32,6 +32,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.easylawmobile.R
+import com.example.easylawmobile.data.viewModels.PaymentModel
 import com.example.easylawmobile.data.viewModels.UserModel
 import kotlinx.coroutines.flow.MutableStateFlow
 
@@ -41,6 +42,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 fun NavigationMenu(
     navController: NavHostController,
     userModel: UserModel,
+    paymentModel: PaymentModel,
     uriState: MutableStateFlow<String>,
     imagePicker: ActivityResultLauncher<PickVisualMediaRequest>
 ) {
@@ -68,7 +70,7 @@ fun NavigationMenu(
                         )
                         NavigationBarItem(
                             label = { Text(text = "اشتراكاتي") },
-                            selected = route == Routes.InterestScreen.route,
+                            selected = route == Routes.SubscriptionScreen.route,
                             onClick = { navController.navigate(Routes.SubscriptionScreen.route) },
                             icon = { Icon(Icons.Default.ShoppingCart, contentDescription = "اشتركاتي") }
                         )
@@ -101,7 +103,7 @@ fun NavigationMenu(
                         ) {
                             Text(
                                 modifier = Modifier.align(Alignment.CenterStart),
-                                text = stringResource(id = R.string.app_name),
+                                text = "المحلل الذكي",
                                 fontSize = 19.sp,
                                 color = MaterialTheme.colorScheme.onPrimary
                             )
@@ -116,8 +118,9 @@ fun NavigationMenu(
                 }
             }
             composable(Routes.NotificationScreen.route) { NotificationScreen() }
-            composable(Routes.SubscriptionScreen.route) { SubscriptionScreen(navController = navController) }
+            composable(Routes.SubscriptionScreen.route) { SubscriptionScreen(navController, paymentModel) }
             composable(Routes.PaymentDetailsScreen.route) { PaymentDetailsScreen() }
+            composable(Routes.PlanDetailScreen.route) { PlanDetailScreen(paymentModel = paymentModel) }
+            }
         }
     }
-}

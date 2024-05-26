@@ -44,6 +44,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -73,85 +74,132 @@ import com.example.easylawmobile.data.viewModels.UserModel
 
 @Composable
 fun ProfileScreen(navController: NavController, sharedPreferencesManager: SharedPreferencesManager, userModel: UserModel) {
-    var themeDark by remember { mutableStateOf(false) } // State for toggling theme
-    var notificationEnabled by remember { mutableStateOf(false) } // State for toggling notifications
+    var themeDark by remember { mutableStateOf(false) }
+    var notificationEnabled by remember { mutableStateOf(false) }
 
-    Column(modifier = Modifier.fillMaxSize()) {
-        Box(
-            modifier = Modifier.fillMaxWidth(),
-            contentAlignment = Alignment.Center
-        ) {
+    var isLoggedIn by remember { mutableStateOf<Boolean?>(null) }
 
-            Header(navController)
-        }
-        Spacer(modifier = Modifier.height(22.dp))
+
+    LaunchedEffect(Unit) {
+        isLoggedIn = sharedPreferencesManager.isLoggedIn()
+    }
+
+    if (isLoggedIn == false) {
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp)
-                .clip(RoundedCornerShape(10.dp)),
-            verticalArrangement = Arrangement.spacedBy(20.dp)
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+            modifier = Modifier.fillMaxSize()
         ) {
-            // First Box: Contains links with icons
-            Box(
+            Image(
+                painter = painterResource(id = R.drawable.no), // Replace with your image resource
+                contentDescription = null,
                 modifier = Modifier
-                    .clip(RoundedCornerShape(8.dp))
-                    .fillMaxWidth()
-                    .shadow(2.dp)
-            ) {
-                Column(
-                    modifier = Modifier
-                        .padding(22.dp)
-                ) {
-                    MenuButton1("المعلومات الشخصية", Icons.Filled.Info) {
-                        // Handle Information Personnel click
-                    }
-                    MenuButton1("اهتماماتي", Icons.Filled.Favorite) {
-                        // Handle My Interest click
-                    }
-                    MenuButton1("الأمن", Icons.Filled.Warning) {
-                        // Handle Security Info click
-                    }
-                }
-            }
-
-            // Second Box: Contains toggle for notifications and theme
-            Box(
+                    .size(200.dp) // Adjust size as needed
+                    .padding(bottom = 16.dp)
+            )
+            Text(
+                text = "You are not authenticated",
+                style = TextStyle(
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 20.sp
+                ),
+                modifier = Modifier.padding(bottom = 16.dp)
+            )
+            Button(
+                onClick = {
+                    navController.navigate(Routes.SignInScreen.route)
+                },
+                colors = ButtonDefaults.buttonColors(Color(0xFF00C8CB)),
                 modifier = Modifier
-                    .clip(RoundedCornerShape(8.dp))
+                    .padding(horizontal = 16.dp)
                     .fillMaxWidth()
-                    .shadow(2.dp)
             ) {
-                Column(
-                    modifier = Modifier
-                        .padding(20.dp)
-                ) {
-                    SwitchWithIcon("الاشعارات", Icons.Filled.Notifications, notificationEnabled) {
-                        notificationEnabled = it
-                    }
-                    SwitchWithIcon("السمة", if (themeDark) Icons.Filled.AddCircle else Icons.Filled.Add, themeDark) {
-                        themeDark = it
-                    }
-                }
-            }
-
-            // Third Box: Link to log out with an icon
-            Box(
-                modifier = Modifier
-                    .clip(RoundedCornerShape(8.dp))
-                    .fillMaxWidth()
-                    .shadow(2.dp)
-                    .background(Color(0xFF00C8CB))
-            ) {
-                MenuButton2("Log Out", Icons.Filled.ExitToApp) {
-                    userModel.setNavValue(0)
-                    sharedPreferencesManager.saveToken("")
-                    sharedPreferencesManager.setLoggedIn(false)
-                    navController.navigate(Routes.HomeScreen.route)
-                }
+                Text(text = "Sign In")
             }
         }
     }
+    else
+    {
+        Column(modifier = Modifier.fillMaxSize()) {
+            Box(
+                modifier = Modifier.fillMaxWidth(),
+                contentAlignment = Alignment.Center
+            ) {
+
+                Header(navController)
+            }
+            Spacer(modifier = Modifier.height(22.dp))
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp)
+                    .clip(RoundedCornerShape(10.dp)),
+                verticalArrangement = Arrangement.spacedBy(20.dp)
+            ) {
+                // First Box: Contains links with icons
+                Box(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(8.dp))
+                        .fillMaxWidth()
+                        .shadow(2.dp)
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .padding(22.dp)
+                    ) {
+                        MenuButton1("المعلومات الشخصية", Icons.Filled.Info) {
+                            // Handle Information Personnel click
+                        }
+                        MenuButton1("اهتماماتي", Icons.Filled.Favorite) {
+                            // Handle My Interest click
+                        }
+                        MenuButton1("الأمن", Icons.Filled.Warning) {
+                            // Handle Security Info click
+                        }
+                    }
+                }
+
+                // Second Box: Contains toggle for notifications and theme
+                Box(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(8.dp))
+                        .fillMaxWidth()
+                        .shadow(2.dp)
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .padding(20.dp)
+                    ) {
+                        SwitchWithIcon("الاشعارات", Icons.Filled.Notifications, notificationEnabled) {
+                            notificationEnabled = it
+                        }
+                        SwitchWithIcon("السمة", if (themeDark) Icons.Filled.AddCircle else Icons.Filled.Add, themeDark) {
+                            themeDark = it
+                        }
+                    }
+                }
+
+                // Third Box: Link to log out with an icon
+                Box(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(8.dp))
+                        .fillMaxWidth()
+                        .shadow(2.dp)
+                        .background(Color(0xFF00C8CB))
+                ) {
+                    MenuButton2("Log Out", Icons.Filled.ExitToApp) {
+                        userModel.setNavValue(0)
+                        sharedPreferencesManager.saveToken("")
+                        sharedPreferencesManager.setLoggedIn(false)
+                        navController.navigate(Routes.HomeScreen.route)
+                    }
+                }
+            }
+        }
+
+    }
+
+
 }
 
 

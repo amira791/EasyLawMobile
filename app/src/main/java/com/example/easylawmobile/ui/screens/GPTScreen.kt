@@ -34,6 +34,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color.Companion.Gray
 import androidx.compose.ui.graphics.Color.Companion.Green
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
@@ -131,7 +132,7 @@ fun GPTScreen(
                     chaViewModel.onEvent(ChatUiEvent.UpdatePrompt(it))
                 },
                 placeholder = {
-                    Text(text = "Type a prompt")
+                    Text(text = "اسأل عن القانون")
                 }
             )
 
@@ -192,7 +193,7 @@ fun ModelChatItem(response: String) {
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(12.dp))
-                .background(Green)
+                .background(Gray)
                 .padding(16.dp),
             text = response,
             fontSize = 17.sp,

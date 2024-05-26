@@ -20,5 +20,8 @@ sealed class Routes (val route: String) {
 
     object PaymentDetailsScreen : Routes ("PaymentDetailsScree")
 
+    object PlanDetailScreen: Routes ("PlanDetailScreen")
+
+
 
 }
