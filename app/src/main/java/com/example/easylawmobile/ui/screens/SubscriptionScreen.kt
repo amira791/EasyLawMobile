@@ -1,9 +1,21 @@
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -14,7 +26,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -22,57 +33,10 @@ import com.example.easylawmobile.R
 import com.example.easylawmobile.data.viewModels.PaymentModel
 
 @Composable
-fun SubscriptionScreen(navController: NavController, viewModel: PaymentModel) {
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White)
-            .padding(25.dp)
-    ) {
-
-        item {
-            SubscriptionOffer(
-                name = "العرض الأساسي",
-                price = "2000.0",
-                onOfferClick = {
-                    viewModel.displayInfoPlan(2000.0f)
-                    navController.navigate(Routes.PlanDetailScreen.route)
-                },
-                onPaymentWithBaridiClick = { navController.navigate(Routes.PaymentDetailsScreen.route) },
-                onPaymentWithCIBClick = { navController.navigate(Routes.PaymentDetailsScreen.route) }
-            )
-        }
-        item {
-            SubscriptionOffer(
-                name = "العرض المتقدم",
-                price = "3000.0",
-                onOfferClick = {
-                    viewModel.displayInfoPlan(3000.0f)
-                    navController.navigate(Routes.PlanDetailScreen.route)
-                },
-                onPaymentWithBaridiClick = { navController.navigate(Routes.PaymentDetailsScreen.route) },
-                onPaymentWithCIBClick = { navController.navigate(Routes.PaymentDetailsScreen.route) }
-            )
-        }
-        item {
-            SubscriptionOffer(
-                name = "العرض الشامل",
-                price = "5000.0",
-                onOfferClick = {
-                    viewModel.displayInfoPlan(5000.0f)
-                    navController.navigate(Routes.PlanDetailScreen.route)
-                },
-                onPaymentWithBaridiClick = { navController.navigate(Routes.PaymentDetailsScreen.route) },
-                onPaymentWithCIBClick = { navController.navigate(Routes.PaymentDetailsScreen.route) }
-            )
-        }
-    }
-}
-
-@Composable
 fun SubscriptionOffer(
     name: String,
     price: String,
+    starCount: Int,
     onOfferClick: () -> Unit,
     onPaymentWithBaridiClick: () -> Unit,
     onPaymentWithCIBClick: () -> Unit
@@ -98,6 +62,25 @@ fun SubscriptionOffer(
                 ),
                 modifier = Modifier.align(Alignment.CenterHorizontally)
             )
+            Spacer(modifier = Modifier.height(8.dp))
+
+            // Star ratings
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            ) {
+                repeat(starCount) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.star),
+                        contentDescription = null,
+                        modifier = Modifier.size(24.dp)
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                }
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
             Text(
                 text = "Price: $price",
                 style = TextStyle(
@@ -128,6 +111,57 @@ fun SubscriptionOffer(
         }
     }
 }
+
+@Composable
+fun SubscriptionScreen(navController: NavController, viewModel: PaymentModel) {
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White)
+            .padding(25.dp)
+    ) {
+        item {
+            SubscriptionOffer(
+                name = "العرض الأساسي",
+                price = "2000.0",
+                starCount = 1,
+                onOfferClick = {
+                    viewModel.displayInfoPlan(2000.0f)
+                    navController.navigate(Routes.PlanDetailScreen.route)
+                },
+                onPaymentWithBaridiClick = { navController.navigate(Routes.PaymentDetailsScreen.route) },
+                onPaymentWithCIBClick = { navController.navigate(Routes.PaymentDetailsScreen.route) }
+            )
+        }
+        item {
+            SubscriptionOffer(
+                name = "العرض المتقدم",
+                price = "3000.0",
+                starCount = 2,
+                onOfferClick = {
+                    viewModel.displayInfoPlan(3000.0f)
+                    navController.navigate(Routes.PlanDetailScreen.route)
+                },
+                onPaymentWithBaridiClick = { navController.navigate(Routes.PaymentDetailsScreen.route) },
+                onPaymentWithCIBClick = { navController.navigate(Routes.PaymentDetailsScreen.route) }
+            )
+        }
+        item {
+            SubscriptionOffer(
+                name = "العرض الشامل",
+                price = "5000.0",
+                starCount = 3,
+                onOfferClick = {
+                    viewModel.displayInfoPlan(5000.0f)
+                    navController.navigate(Routes.PlanDetailScreen.route)
+                },
+                onPaymentWithBaridiClick = { navController.navigate(Routes.PaymentDetailsScreen.route) },
+                onPaymentWithCIBClick = { navController.navigate(Routes.PaymentDetailsScreen.route) }
+            )
+        }
+    }
+}
+
 
 @Composable
 fun PaymentOptionButton(
