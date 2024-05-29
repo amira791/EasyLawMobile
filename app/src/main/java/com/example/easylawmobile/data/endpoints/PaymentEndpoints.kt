@@ -1,6 +1,7 @@
 import com.example.easylawmobile.URL
 import com.example.easylawmobile.data.models.Service
 import com.google.gson.GsonBuilder
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.Retrofit
@@ -24,6 +25,7 @@ data class SubscribeRequest(
     val method: String
 )
 
+
 interface PaymentEndpoints{
 
     @GET("payment/service")
@@ -36,7 +38,7 @@ interface PaymentEndpoints{
     suspend fun subscribe(
         @Header("Authorization") authToken: String,
         @Body subscribeRequest: SubscribeRequest
-    ): Response<Void>
+    ): Response<ResponseBody>
 
 
 

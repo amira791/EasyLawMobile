@@ -5,7 +5,7 @@ class SharedPreferencesManager(context: Context) {
 
     private val pref = context.getSharedPreferences("auth_prefs", Context.MODE_PRIVATE)
 
-    val Localuser = mutableStateOf<String?>(null)
+    var Localuser = mutableStateOf<String?>(null)
 
     fun isLoggedIn(): Boolean {
         return pref.getBoolean(KEY_IS_LOGGED_IN, false)
@@ -13,6 +13,7 @@ class SharedPreferencesManager(context: Context) {
 
     fun setLocalUsername(user: String) {
         pref.edit().putString(KEY_LOCAL_USER, user).apply()
+        Localuser.value = user
     }
 
     fun getLocalUsername(): String? {
@@ -39,7 +40,6 @@ class SharedPreferencesManager(context: Context) {
         pref.edit().putBoolean(KEY_IS_LOGGED_IN, value).apply()
     }
 
-    // Subscription status functions
     fun isSubscribed(): Boolean {
         return pref.getBoolean(KEY_IS_SUBSCRIBED, false)
     }
@@ -53,6 +53,6 @@ class SharedPreferencesManager(context: Context) {
         private const val KEY_LOCAL_USER = "Localuser"
         private const val KEY_TOKEN = "token"
         private const val KEY_USER_ROLE = "user_role"
-        private const val KEY_IS_SUBSCRIBED = "is_subscribed" // New key for subscription status
+        private const val KEY_IS_SUBSCRIBED = "is_subscribed"
     }
 }

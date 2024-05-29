@@ -1,7 +1,9 @@
+
 import android.annotation.SuppressLint
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -9,7 +11,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Face
-import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.BottomAppBar
@@ -25,19 +26,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.example.easylawmobile.R
 import com.example.easylawmobile.data.viewModels.PaymentModel
 import com.example.easylawmobile.data.viewModels.UserModel
 import kotlinx.coroutines.flow.MutableStateFlow
 
 
+@OptIn(ExperimentalFoundationApi::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun NavigationMenu(
@@ -123,6 +123,16 @@ fun NavigationMenu(
             composable(Routes.SubscriptionScreen.route) { SubscriptionScreen(navController, paymentModel) }
             composable(Routes.PaymentDetailsScreen.route) { PaymentDetailsScreen(paymentModel) }
             composable(Routes.PlanDetailScreen.route) { PlanDetailScreen(paymentModel = paymentModel) }
+            composable(Routes.InfoProfileScreen.route){InfoProfileScreen(
+                sharedPreferencesManager = sh,
+                userModel = userModel,
+                navController = navController
+            )}
+            composable(Routes.SecurityScreen.route){ SecurityScreen(
+                userModel = userModel,
+                navController = navController,
+                sharedPreferencesManager = sh
+            )}
             }
         }
     }

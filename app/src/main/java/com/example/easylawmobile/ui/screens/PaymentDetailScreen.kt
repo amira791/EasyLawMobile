@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -26,6 +27,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -41,7 +43,8 @@ import kotlinx.coroutines.withContext
 private suspend fun createStripeToken(
     stripe: Stripe,
     cardParams: CardParams,
-    onTokenCreated: (String) -> Unit
+    paymentModel: PaymentModel,
+    onTokenCreated: (String) -> Unit,
 ) {
     withContext(Dispatchers.IO) {
         try {
@@ -50,6 +53,7 @@ private suspend fun createStripeToken(
                 onTokenCreated(it)
             }
         } catch (e: Exception) {
+            paymentModel.paymentError = e.message?:"PAYMENT ERROR"
             e.printStackTrace()
         }
     }
@@ -110,7 +114,8 @@ fun PaymentDetailsScreen(paymentModel: PaymentModel) {
         ) {
 
             Text(
-                text = paymentModel.paymentError
+                text = paymentModel.paymentError,
+                color = Color.Red
             )
 
             Surface(
@@ -125,7 +130,8 @@ fun PaymentDetailsScreen(paymentModel: PaymentModel) {
                     onValueChange = { cardNumber = it },
                     label = { Text("رقم البطاقة") },
                     modifier = Modifier.fillMaxWidth(),
-                    textStyle = TextStyle(color = Color.Black)
+                    textStyle = TextStyle(color = Color.Black),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 )
             }
 
@@ -190,7 +196,7 @@ fun PaymentDetailsScreen(paymentModel: PaymentModel) {
                     )
                     cardParams.let { params ->
                         coroutineScope.launch {
-                            createStripeToken(stripe, params){token->
+                            createStripeToken(stripe, params, paymentModel = paymentModel){token->
                                 paymentModel.subscribe(paymentModel.priceId, Token(id=token), "CIB")
                             }
                         }

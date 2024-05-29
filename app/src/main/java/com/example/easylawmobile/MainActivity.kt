@@ -40,6 +40,8 @@ class MainActivity : ComponentActivity() {
       )
     }
 
+
+
     private  val paymentModel : PaymentModel by viewModels {
         PaymentModel.Factory(
             (application as EasyLawApplication).sharedPreferencesManager,

@@ -2,8 +2,6 @@ package com.example.easylawmobile.data.viewModels
 
 import SharedPreferencesManager
 import Token
-import android.content.Context
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -12,13 +10,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.example.easylawmobile.data.endpoints.LoginResponse
 import com.example.easylawmobile.data.models.Service
 import com.example.easylawmobile.data.repositories.PaymentRepository
 import com.example.easylawmobile.data.repositories.UserRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.json.JSONObject
 
 class PaymentModel(
     private val sharedPreferencesManager: SharedPreferencesManager,
@@ -41,6 +39,7 @@ class PaymentModel(
     var accessesPlan: List<String> by mutableStateOf(emptyList())
     var priceId: String by mutableStateOf("")
     var method: String by mutableStateOf("")
+
 
 
     var paymentError:String by mutableStateOf("")
@@ -82,9 +81,12 @@ class PaymentModel(
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 val authToken ="token ${sharedPreferencesManager.getToken()}"
-                val success =  paymentRepository.subscribe(authToken, priceId, token, method)
-                if(!success.isSuccessful)
-                    paymentError = success.message()
+                val response =  paymentRepository.subscribe(authToken, priceId, token, method)
+                if(!response.isSuccessful) {
+                    val responseData = response.body()?.toString()
+                    val jsonResponse = JSONObject(responseData ?: "")
+                    paymentError = jsonResponse.getString("message")
+                }
                 sharedPreferencesManager.setSubscribed(true)
             }
         }

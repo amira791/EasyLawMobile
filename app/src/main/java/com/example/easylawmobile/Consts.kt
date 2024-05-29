@@ -1,2 +1,2 @@
 package com.example.easylawmobile
-const val URL = "https://d908-41-111-189-195.ngrok-free.app/"
+const val URL = " https://4bb4-105-235-133-232.ngrok-free.app/"
