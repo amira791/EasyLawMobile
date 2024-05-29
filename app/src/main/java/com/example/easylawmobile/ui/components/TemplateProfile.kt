@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -25,9 +27,10 @@ import androidx.navigation.NavController
 import com.example.easylawmobile.R
 
 @Composable
-fun Header(navController: NavController) {
-    Box(modifier = Modifier.fillMaxWidth()) {
+fun Header(navController: NavController, sharedPreferencesManager: SharedPreferencesManager) {
+    val username by remember { sharedPreferencesManager.Localuser }
 
+    Box(modifier = Modifier.fillMaxWidth()) {
         Image(
             painter = painterResource(id = R.drawable.big),
             contentDescription = null,
@@ -41,7 +44,7 @@ fun Header(navController: NavController) {
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.TopStart)
-                .padding(16.dp), // Adjust padding as necessary
+                .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
@@ -75,26 +78,22 @@ fun Header(navController: NavController) {
                     .background(color = Color(0xFF00C8CB)),
                 contentAlignment = Alignment.Center
             ) {
-
                 Text(
-                    text = "A",
+                    text = username?.firstOrNull()?.toString() ?: "A",
                     color = Color.White,
                     fontSize = 24.sp
                 )
             }
 
-
             Text(
-                text = "amira791",
-                color = Color.Black, // Adjust the color as per your theme
-                fontSize = 16.sp, // Adjust the font size as per your requirement
+                text = username ?: "",
+                color = Color.Black,
+                fontSize = 16.sp,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
-                    .align(Alignment.CenterHorizontally) // Center the text horizontally
-                    .padding(top = 8.dp) // Space between the profile image and the text
+                    .align(Alignment.CenterHorizontally)
+                    .padding(top = 8.dp)
             )
-
-
         }
     }
 }
