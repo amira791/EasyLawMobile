@@ -1,16 +1,20 @@
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -19,10 +23,18 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.easylawmobile.R
+import com.example.easylawmobile.data.models.Service
 import com.example.easylawmobile.data.viewModels.PaymentModel
 
 @Composable
 fun SubscriptionScreen(navController: NavController, viewModel: PaymentModel) {
+
+    LaunchedEffect(Unit) {
+       viewModel.getServices()
+    }
+    val services = viewModel.allServices.value
+    val context = LocalContext.current
+
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
@@ -30,42 +42,41 @@ fun SubscriptionScreen(navController: NavController, viewModel: PaymentModel) {
             .padding(25.dp)
     ) {
 
-        item {
-            SubscriptionOffer(
-                name = "العرض الأساسي",
-                price = "2000.0",
-                onOfferClick = {
-                    viewModel.displayInfoPlan(2000.0f)
-                    navController.navigate(Routes.PlanDetailScreen.route)
-                },
-                onPaymentWithBaridiClick = { navController.navigate(Routes.PaymentDetailsScreen.route) },
-                onPaymentWithCIBClick = { navController.navigate(Routes.PaymentDetailsScreen.route) }
-            )
-        }
-        item {
-            SubscriptionOffer(
-                name = "العرض المتقدم",
-                price = "3000.0",
-                onOfferClick = {
-                    viewModel.displayInfoPlan(3000.0f)
-                    navController.navigate(Routes.PlanDetailScreen.route)
-                },
-                onPaymentWithBaridiClick = { navController.navigate(Routes.PaymentDetailsScreen.route) },
-                onPaymentWithCIBClick = { navController.navigate(Routes.PaymentDetailsScreen.route) }
-            )
-        }
-        item {
-            SubscriptionOffer(
-                name = "العرض الشامل",
-                price = "5000.0",
-                onOfferClick = {
-                    viewModel.displayInfoPlan(5000.0f)
-                    navController.navigate(Routes.PlanDetailScreen.route)
-                },
-                onPaymentWithBaridiClick = { navController.navigate(Routes.PaymentDetailsScreen.route) },
-                onPaymentWithCIBClick = { navController.navigate(Routes.PaymentDetailsScreen.route) }
-            )
-        }
+        if(services != null)
+            items(services){
+                val payable = viewModel.current.value == null ||  it.tarif > viewModel.current.value!!
+
+                SubscriptionOffer(
+                    name = it.nom,
+                    price = "${it.tarif}",
+                    onOfferClick = {
+                        viewModel.displayInfoPlan(it.tarif)
+                        navController.navigate(Routes.PlanDetailScreen.route)
+                    },
+                    onPaymentWithBaridiClick = {
+                        if(!payable)
+                        {
+                            return@SubscriptionOffer
+                        }
+                        viewModel.priceId = it.priceId
+                        viewModel.method = "BaridiMob"
+                        navController.navigate(Routes.PaymentDetailsScreen.route)
+                                               },
+                    onPaymentWithCIBClick = {
+                        if(!payable)
+                        {
+                            return@SubscriptionOffer
+                        }
+                        viewModel.priceId = it.priceId
+                        viewModel.method = "CIB"
+                        navController.navigate(Routes.PaymentDetailsScreen.route)
+                    },
+                    color = if(it.tarif != viewModel.current.value) Color(0xFFE3FAFC) else Color(0x8858D6D7)
+                )
+
+            }
+
+
     }
 }
 
@@ -75,13 +86,14 @@ fun SubscriptionOffer(
     price: String,
     onOfferClick: () -> Unit,
     onPaymentWithBaridiClick: () -> Unit,
-    onPaymentWithCIBClick: () -> Unit
+    onPaymentWithCIBClick: () -> Unit,
+    color: Color = Color(0xFFE3FAFC)
 ) {
     Box(
-        modifier = Modifier
+        modifier =  Modifier
             .fillMaxWidth()
             .padding(bottom = 16.dp)
-            .background(color = Color(0xFFE3FAFC))
+            .background(color = color)
             .clickable(onClick = onOfferClick),
         contentAlignment = Alignment.Center
     ) {

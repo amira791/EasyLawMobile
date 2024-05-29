@@ -1,4 +1,5 @@
 import android.annotation.SuppressLint
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.compose.foundation.background
@@ -53,6 +54,7 @@ fun NavigationMenu(
     val sh = SharedPreferencesManager(context)
     val isLogged = sh.isLoggedIn()
     val isSubscribed = sh.isSubscribed()
+
 
     Scaffold(
         bottomBar = {
@@ -119,7 +121,7 @@ fun NavigationMenu(
             }
             composable(Routes.NotificationScreen.route) { NotificationScreen() }
             composable(Routes.SubscriptionScreen.route) { SubscriptionScreen(navController, paymentModel) }
-            composable(Routes.PaymentDetailsScreen.route) { PaymentDetailsScreen() }
+            composable(Routes.PaymentDetailsScreen.route) { PaymentDetailsScreen(paymentModel) }
             composable(Routes.PlanDetailScreen.route) { PlanDetailScreen(paymentModel = paymentModel) }
             }
         }
