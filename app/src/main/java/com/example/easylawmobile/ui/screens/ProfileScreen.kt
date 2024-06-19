@@ -72,7 +72,7 @@ fun ProfileScreen(navController: NavController, sharedPreferencesManager: Shared
                     .padding(bottom = 16.dp)
             )
             Text(
-                text = "You are not authenticated",
+                text = "لم تسجل دخولك بعد",
                 style = TextStyle(
                     fontWeight = FontWeight.Bold,
                     fontSize = 20.sp
@@ -88,7 +88,7 @@ fun ProfileScreen(navController: NavController, sharedPreferencesManager: Shared
                     .padding(horizontal = 16.dp)
                     .fillMaxWidth()
             ) {
-                Text(text = "Sign In")
+                Text(text = "تسجيل الدخول")
             }
         }
     }

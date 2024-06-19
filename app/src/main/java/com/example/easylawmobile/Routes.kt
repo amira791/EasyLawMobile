@@ -26,5 +26,19 @@ sealed class Routes (val route: String) {
     object SecurityScreen: Routes("SecurityScreen")
 
 
+    object RechDetailsScreen : Routes("RechDetailsScreen/{description}/{type_text}/{signature_date}/{publication_date}/{source}") {
+        fun createRoute(description: String?, type_text: String?, signature_date: String?, publication_date: String?, source: String?) =
+            "RechDetailsScreen/$description/$type_text/$signature_date/$publication_date/$source"
+    }
+
+
+
+
+
+
+
+
+
+
 
 }

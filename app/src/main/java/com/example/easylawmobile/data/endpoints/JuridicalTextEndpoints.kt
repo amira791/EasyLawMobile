@@ -6,27 +6,34 @@ import com.google.gson.GsonBuilder
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
+import retrofit2.http.Query
 
 interface JuridicalTextEndpoints {
 
     @GET("data_collection/index_page")
-    suspend fun searchJuridicalTexts(): List<JuridicalText> // Define the appropriate response type
+    suspend fun searchJuridicalTexts(@Query("q") query: String): SearchResponse
 
     companion object {
-        var endpoint: UserEndpoints? = null
+        var endpoint: JuridicalTextEndpoints? = null
         var gson = GsonBuilder()
             .setLenient()
             .create()
 
-        fun createEndpoint(): UserEndpoints {
+        fun createEndpoint(): JuridicalTextEndpoints {
             if (endpoint == null) {
                 endpoint = Retrofit.Builder().baseUrl(URL)
                     .addConverterFactory(GsonConverterFactory.create(gson)).build()
-                    .create(UserEndpoints::class.java)
+                    .create(JuridicalTextEndpoints::class.java)
             }
 
             return endpoint!!
         }
     }
 }
+
+
+data class SearchResponse(
+    val results: List<JuridicalText>,
+    val len: Int
+)
 

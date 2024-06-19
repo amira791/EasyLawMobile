@@ -1,6 +1,5 @@
 
 import android.annotation.SuppressLint
-import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -32,6 +31,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.easylawmobile.data.viewModels.JuridicalTextModel
 import com.example.easylawmobile.data.viewModels.PaymentModel
 import com.example.easylawmobile.data.viewModels.UserModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -44,6 +44,7 @@ fun NavigationMenu(
     navController: NavHostController,
     userModel: UserModel,
     paymentModel: PaymentModel,
+    juridicalTextModel: JuridicalTextModel,
     uriState: MutableStateFlow<String>,
     imagePicker: ActivityResultLauncher<PickVisualMediaRequest>
 ) {
@@ -89,7 +90,7 @@ fun NavigationMenu(
     ) { paddingValues ->
         NavHost(navController = navController, startDestination = Routes.LoadingScreen.route) {
             composable(Routes.LoadingScreen.route) { LoadingScreen(navController) }
-            composable(Routes.HomeScreen.route) { HomeScreen(navController) }
+            composable(Routes.HomeScreen.route) { HomeScreen(navController, juridicalTextModel) }
             composable(Routes.InterestScreen.route) { InterestScreen(navController, sh) }
             composable(Routes.ProfileScreen.route) { ProfileScreen(navController, sh, userModel) }
             composable(Routes.SignInScreen.route) { SignInScreen(navController, userModel, sh) }
@@ -113,15 +114,19 @@ fun NavigationMenu(
                     }
                 ) { innerPadding ->
                     GPTScreen(
+
                         paddingValues = innerPadding,
                         uriState = uriState,
-                        imagePicker = imagePicker
+                        imagePicker = imagePicker,
+                        sharedPreferencesManager = sh,
+                        navController = navController
+
                     )
                 }
             }
             composable(Routes.NotificationScreen.route) { NotificationScreen() }
             composable(Routes.SubscriptionScreen.route) { SubscriptionScreen(navController, paymentModel) }
-            composable(Routes.PaymentDetailsScreen.route) { PaymentDetailsScreen(paymentModel) }
+            composable(Routes.PaymentDetailsScreen.route) { PaymentDetailsScreen(paymentModel, sh) }
             composable(Routes.PlanDetailScreen.route) { PlanDetailScreen(paymentModel = paymentModel) }
             composable(Routes.InfoProfileScreen.route){InfoProfileScreen(
                 sharedPreferencesManager = sh,
@@ -133,6 +138,16 @@ fun NavigationMenu(
                 navController = navController,
                 sharedPreferencesManager = sh
             )}
+
+            composable(Routes.RechDetailsScreen.route) {
+                val description =it.arguments?.getString("description").toString()
+                val type_text = it.arguments?.getString("type_text").toString()
+                val signature_date = it.arguments?.getString("signature_date").toString()
+                val publication_date =it.arguments?.getString("publication_date").toString()
+                val source = it.arguments?.getString("source").toString()
+
+                DisplayRechDetails(description, type_text, signature_date, publication_date, source)
+            }
             }
         }
     }

@@ -6,6 +6,7 @@ class SharedPreferencesManager(context: Context) {
     private val pref = context.getSharedPreferences("auth_prefs", Context.MODE_PRIVATE)
 
     var Localuser = mutableStateOf<String?>(null)
+    var plan3 = mutableStateOf<Int?>(0)
 
     fun isLoggedIn(): Boolean {
         return pref.getBoolean(KEY_IS_LOGGED_IN, false)
@@ -48,11 +49,21 @@ class SharedPreferencesManager(context: Context) {
         pref.edit().putBoolean(KEY_IS_SUBSCRIBED, isSubscribed).apply()
     }
 
+    fun setPlan3(value: Int?) {
+        pref.edit().putInt(KEY_PLAN3, value ?: 0).apply()
+        plan3.value = value
+    }
+
+    fun getPlan3(): Int? {
+        return if (pref.contains(KEY_PLAN3)) pref.getInt(KEY_PLAN3, 0) else null
+    }
+
     companion object {
         private const val KEY_IS_LOGGED_IN = "is_logged_in"
         private const val KEY_LOCAL_USER = "Localuser"
         private const val KEY_TOKEN = "token"
         private const val KEY_USER_ROLE = "user_role"
         private const val KEY_IS_SUBSCRIBED = "is_subscribed"
+        private const val KEY_PLAN3 = "plan3"
     }
 }

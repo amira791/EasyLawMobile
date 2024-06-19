@@ -1,4 +1,4 @@
-import android.widget.Toast
+
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,7 +11,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -61,7 +60,7 @@ private suspend fun createStripeToken(
 
 
 @Composable
-fun PaymentDetailsScreen(paymentModel: PaymentModel) {
+fun PaymentDetailsScreen(paymentModel: PaymentModel, sharedPreferencesManager: SharedPreferencesManager) {
     var cardNumber by remember { mutableStateOf("") }
     var cardOwnerName by remember { mutableStateOf("") }
     var expirationDate by remember { mutableStateOf("") }
@@ -71,6 +70,7 @@ fun PaymentDetailsScreen(paymentModel: PaymentModel) {
 
     val context = LocalContext.current
     val stripe = Stripe(context, PaymentConfiguration.getInstance(context).publishableKey)
+
 
     val coroutineScope = rememberCoroutineScope()
 
@@ -194,6 +194,11 @@ fun PaymentDetailsScreen(paymentModel: PaymentModel) {
                         expYear = 24,
                         cvc = cvvNumber,
                     )
+                    if (paymentModel.priceId.equals(5000.00)) {
+                        sharedPreferencesManager.setPlan3(1)
+
+                    }
+
                     cardParams.let { params ->
                         coroutineScope.launch {
                             createStripeToken(stripe, params, paymentModel = paymentModel){token->

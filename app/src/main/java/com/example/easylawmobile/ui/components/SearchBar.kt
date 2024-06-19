@@ -1,6 +1,7 @@
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -27,7 +28,8 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun SearchBar(
     searchQuery: String,
-    onSearchQueryChanged: (String) -> Unit
+    onSearchQueryChanged: (String) -> Unit,
+    onSearchClicked: (String) -> Unit // Pass the search query to the click handler
 ) {
     Box(
         modifier = Modifier
@@ -46,7 +48,8 @@ fun SearchBar(
             Icon(
                 imageVector = Icons.Default.Search,
                 contentDescription = "Search Icon",
-                tint = Color.Gray
+                tint = Color.Gray,
+                modifier = Modifier.clickable { onSearchClicked(searchQuery) } // Pass the search query
             )
             Spacer(modifier = Modifier.width(8.dp))
             BasicTextField(
@@ -55,11 +58,12 @@ fun SearchBar(
                     onSearchQueryChanged(newQuery)
                 },
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .weight(1f)
                     .background(Color.White),
                 keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Search),
                 keyboardActions = KeyboardActions(onSearch = {
-                    // Handle the search action here
+                    // Handle the search action when pressing Enter
+                    onSearchClicked(searchQuery) // Pass the search query
                 }),
                 singleLine = true,
                 textStyle = LocalTextStyle.current.copy(fontSize = 16.sp)
@@ -67,3 +71,4 @@ fun SearchBar(
         }
     }
 }
+

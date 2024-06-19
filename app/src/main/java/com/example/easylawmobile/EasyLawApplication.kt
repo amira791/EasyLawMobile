@@ -1,11 +1,15 @@
 package com.example.easylawmobile
 
+import PaymentEndpoints
 import SharedPreferencesManager
 import android.app.Application
+import com.example.easylawmobile.data.endpoints.JuridicalTextEndpoints
 import com.example.easylawmobile.data.endpoints.UserEndpoints
+import com.example.easylawmobile.data.repositories.JuridicalTextRepository
 import com.example.easylawmobile.data.repositories.PaymentRepository
 import com.example.easylawmobile.data.repositories.UserRepository
 import com.stripe.android.PaymentConfiguration
+import database
 
 class EasyLawApplication : Application (){
 
@@ -16,6 +20,7 @@ class EasyLawApplication : Application (){
     val userRepository by lazy {UserRepository(UserEndpoints.createEndpoint())}
     val paymentRepository by lazy {PaymentRepository(PaymentEndpoints.createEndpoint())}
     val sharedPreferencesManager by lazy { SharedPreferencesManager(applicationContext) }
+    val juridicalTextRepository by lazy {JuridicalTextRepository(JuridicalTextEndpoints.createEndpoint())}
 
 
     override fun onCreate() {

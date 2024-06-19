@@ -14,6 +14,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
+import com.example.easylawmobile.data.viewModels.JuridicalTextModel
 import com.example.easylawmobile.data.viewModels.PaymentModel
 import com.example.easylawmobile.data.viewModels.UserModel
 import com.example.easylawmobile.ui.theme.EasyLawMobileTheme
@@ -41,6 +42,14 @@ class MainActivity : ComponentActivity() {
     }
 
 
+    private val juridicalTextModel: JuridicalTextModel by viewModels {
+        JuridicalTextModel.Factory(
+            (application as EasyLawApplication).sharedPreferencesManager,
+            (application as EasyLawApplication).juridicalTextRepository
+        )
+
+    }
+
 
     private  val paymentModel : PaymentModel by viewModels {
         PaymentModel.Factory(
@@ -64,7 +73,7 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
 
-                    NavigationMenu(navController = rememberNavController() , userModel, paymentModel, uriState, imagePicker)
+                    NavigationMenu(navController = rememberNavController() , userModel, paymentModel, juridicalTextModel, uriState, imagePicker)
 
                 }
             }
