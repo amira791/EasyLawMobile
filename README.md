@@ -7,7 +7,7 @@ Here all steps to run this Mobile App :
    - add this url to Const.kt in kotlin project
    - add it also in ALLOWED_HOSTS (settings.py) in django project
 * Elastic search configuration 
-   - run elastic search in your commande " elasticsearch "
+   - run elastic search in your cmd by this command " elasticsearch "
 * Running the app :
    - install an emulator and confirm that is connected to the internet
-   - or you can use your mobile phone in developement mode 
+   - or you can use your  phone in developement mode 
