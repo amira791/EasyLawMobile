@@ -1,13 +1,31 @@
-Here all steps to run this Mobile App :
-* Ngrok Installation 
-   - install ngrok from this link https://ngrok.com/download
-   - run you server and get the port number (for example 8000)
-   - in cmd navigate to the folder where ngrok.exe exist
-   - run this command " ngrok http 8000 " you will get a free public url to host the server
-   - add this url to Const.kt in kotlin project
-   - add it also in ALLOWED_HOSTS (settings.py) in django project
-* Elastic search configuration 
-   - run elastic search in your cmd by this command " elasticsearch "
-* Running the app :
-   - install an emulator and confirm that is connected to the internet
-   - or you can use your  phone in developement mode 
+# Guide d'Utilisation de l'Application Mobile
+
+## Étapes pour Exécuter l'Application Mobile
+
+### 1. Installation de Ngrok
+
+1. Installer Ngrok à partir de ce [lien](https://ngrok.com/download).
+2. Exécuter votre serveur et obtenir le numéro de port (par exemple 8000).
+3. Dans l'invite de commande (cmd), naviguer vers le dossier où `ngrok.exe` se trouve.
+4. Exécuter la commande suivante pour obtenir une URL publique gratuite pour héberger le serveur :
+    ```sh
+    ngrok http 8000
+    ```
+5. Ajouter cette URL dans `Const.kt` dans le projet Kotlin.
+6. Ajouter également cette URL dans `ALLOWED_HOSTS` dans `settings.py` du projet Django.
+
+### 2. Configuration d'Elasticsearch
+
+1. Exécuter Elasticsearch dans votre cmd avec la commande suivante :
+    ```sh
+    elasticsearch
+    ```
+
+### 3. Exécution de l'Application
+
+1. Installer un émulateur et confirmer qu'il est connecté à Internet.
+2. Alternativement, vous pouvez utiliser votre téléphone en mode développement.
+
+---
+
+
